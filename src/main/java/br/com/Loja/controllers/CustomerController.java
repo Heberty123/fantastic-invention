@@ -6,10 +6,7 @@ import br.com.Loja.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -39,5 +36,12 @@ public class CustomerController {
         if(this.repository.existsByCpf(cpf))
             return new ResponseEntity<>(true, HttpStatus.OK);
         return new ResponseEntity<>(false, HttpStatus.OK);
+    }
+
+
+    @PostMapping("/create")
+    public ResponseEntity<CustomerDTO> create(@RequestBody Customer customer){
+        CustomerDTO dto = new CustomerDTO(repository.save(customer));
+        return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 }
