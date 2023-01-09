@@ -1,5 +1,6 @@
 package br.com.Loja.controllers;
 
+import br.com.Loja.dto.CustomerDTO;
 import br.com.Loja.models.Customer;
 import br.com.Loja.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +21,16 @@ public class CustomerController {
     private CustomerRepository repository;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Customer>> findAll(){
+    public ResponseEntity<List<CustomerDTO>> findAll(){
         List<Customer> customers = this.repository.findAll();
 
         if(customers.isEmpty())
             return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
 
-        return new ResponseEntity<>(customers,HttpStatus.OK);
+        List<CustomerDTO> dtos = customers.stream()
+                .map(CustomerDTO::new)
+                .toList();
+        return new ResponseEntity<>(dtos,HttpStatus.OK);
     }
 
 
