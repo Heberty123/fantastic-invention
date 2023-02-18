@@ -10,21 +10,20 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-public class Customer {
+public class DeliveryType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+
     @Column(unique = true)
-    private String cpf;
+    private String name;
 
-    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
-    private List<Address> addresses = new ArrayList<Address>();
+    @OneToMany(mappedBy = "deliveryType", fetch = FetchType.LAZY)
+    List<Address> addresses = new ArrayList<>();
 
-
-    public Customer(String name, String cpf) {
+    public DeliveryType(Long id, String name){
+        this.id = id;
         this.name = name;
-        this.cpf = cpf;
     }
 }

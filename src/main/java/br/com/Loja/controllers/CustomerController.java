@@ -1,6 +1,7 @@
 package br.com.Loja.controllers;
 
 import br.com.Loja.dto.CustomerDTO;
+import br.com.Loja.form.CustomerForm;
 import br.com.Loja.models.Customer;
 import br.com.Loja.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +41,8 @@ public class CustomerController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<CustomerDTO> create(@RequestBody Customer customer){
-        CustomerDTO dto = new CustomerDTO(repository.save(customer));
+    public ResponseEntity<CustomerDTO> create(@RequestBody CustomerForm customerForm){
+        CustomerDTO dto = new CustomerDTO(repository.save(customerForm.toCustomer()));
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 }
