@@ -45,4 +45,19 @@ public class CustomerController {
         CustomerDTO dto = new CustomerDTO(repository.save(customerForm.toCustomer()));
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
+
+    @PostMapping("/create/dependent/{customerId}")
+    public ResponseEntity<CustomerDTO> createDependent(@RequestBody CustomerForm customerForm, @PathVariable Long customerId){
+        Customer customer = this.repository.getReferenceById(customerId);
+
+        Customer customerDependent = customerForm.toCustomer();
+        /*
+        customer.addCustomerDependent(customerDependent);
+         */
+        customerDependent.setParentCustomer(customer);
+        CustomerDTO dto = new CustomerDTO(this.repository.save(customerDependent));
+
+
+        return new ResponseEntity<>(dto, HttpStatus.CREATED);
+    }
 }

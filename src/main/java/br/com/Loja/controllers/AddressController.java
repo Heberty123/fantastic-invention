@@ -3,6 +3,7 @@ package br.com.Loja.controllers;
 import br.com.Loja.dto.AddressDTO;
 import br.com.Loja.dto.DeliveryTypeDTO;
 import br.com.Loja.form.AddressForm;
+import br.com.Loja.form.CustomerForm;
 import br.com.Loja.models.Address;
 import br.com.Loja.models.Customer;
 import br.com.Loja.models.DeliveryType;
