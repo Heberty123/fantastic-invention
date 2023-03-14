@@ -21,13 +21,13 @@ public class Customer {
     @Column(unique = true)
     private String cpf;
 
-    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Address> addresses = new ArrayList<Address>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Customer parentCustomer;
 
-    @OneToMany(mappedBy = "parentCustomer")
+    @OneToMany(mappedBy = "parentCustomer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Customer> customersDependents = new HashSet<Customer>();
 
 

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -46,6 +45,21 @@ public class CustomerController {
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
+    @PutMapping("/update/{customerId}")
+    public ResponseEntity<CustomerDTO> update(@RequestBody CustomerForm customerForm,
+                                              @PathVariable Long customerId){
+        Customer customer = customerForm.toCustomer();
+        customer.setId(customerId);
+        CustomerDTO dto = new CustomerDTO(repository.save(customer));
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{customerId}")
+    public ResponseEntity<?> deleteById(@PathVariable Long customerId){
+        this.repository.deleteById(customerId);
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping("/create/dependent/{customerId}")
     public ResponseEntity<CustomerDTO> createDependent(@RequestBody CustomerForm customerForm, @PathVariable Long customerId){
         Customer customer = this.repository.getReferenceById(customerId);
@@ -60,4 +74,15 @@ public class CustomerController {
 
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
+
+    @GetMapping("/all/dependentsCustomers/{customerId}")
+    public ResponseEntity<List<CustomerDTO>> findAllDependentsCustomers(@PathVariable Long customerId){
+        List<Customer> customer = this.repository.findAllByParentCustomerId(customerId);
+        List<CustomerDTO> dtos = customer.stream()
+                .map(CustomerDTO::new)
+                .toList();
+
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
+    }
+
 }
