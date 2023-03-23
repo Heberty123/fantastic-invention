@@ -1,9 +1,13 @@
 package br.com.Loja.dto;
 
 import br.com.Loja.models.Address;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class AddressDTO {
 
     private Long id;
@@ -29,26 +33,6 @@ public class AddressDTO {
     private String telephone1;
 
     private String telephone2;
-
-    public AddressDTO(){}
-
-    public AddressDTO(Long id, String street, Integer number, String neighborhood,
-                      String city, String uf, String cep, DeliveryTypeDTO deliveryType,
-                      String cellphone1, String cellphone2,
-                      String telephone1, String telephone2) {
-        this.id = id;
-        this.street = street;
-        this.number = number;
-        this.neighborhood = neighborhood;
-        this.city = city;
-        this.uf = uf;
-        this.cep = cep;
-        this.deliveryType = deliveryType;
-        this.cellphone1 = cellphone1;
-        this.cellphone2 = cellphone2;
-        this.telephone1 = telephone1;
-        this.telephone2 = telephone2;
-    }
 
     public AddressDTO(Address address) {
         id = address.getId();
