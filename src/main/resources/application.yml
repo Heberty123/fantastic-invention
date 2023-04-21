@@ -6,7 +6,7 @@ spring:
       ddl-auto: update
   datasource:
     platform: postgres
-    url: jdbc:postgresql://localhost:5432/loja
+    url: jdbc:postgresql://database:5432/loja
     username: postgres
     password: Teste01@
     driverClassName: org.postgresql.Driver

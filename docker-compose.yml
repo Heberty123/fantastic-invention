@@ -1,0 +1,26 @@
+services:
+  api:
+    build: .
+    container_name: api
+    ports:
+      - 8080:8080
+    depends_on:
+      - database
+    networks:
+      - api-db
+  database:
+    image: postgres
+    container_name: database
+    environment:
+      - POSTGRES_DB=loja
+      - POSTGRES_PASSWORD=Teste01@
+    ports:
+      - 5432:5432
+    networks:
+      - api-db
+    volumes:                                                                                                                                                                                                                                              
+      - db-data:/var/lib/postgresql/data                                                                                                                                                                                                                  
+volumes:                                                                                                                                                                                                                                                  
+  db-data:
+networks:
+  api-db:
