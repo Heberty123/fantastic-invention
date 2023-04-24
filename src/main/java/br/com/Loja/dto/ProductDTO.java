@@ -23,7 +23,9 @@ public class ProductDTO {
 
     private Long barcode;
 
-    private BrandDTO brand;
+    private String brand;
+
+    private String productType;
 
     private BigDecimal price;
 
@@ -33,7 +35,8 @@ public class ProductDTO {
         description = product.getDescription();
         reference = product.getReference();
         barcode = product.getBarcode();
-        brand = new BrandDTO(product.getBrand());
+        brand = product.getBrand().getName();
+        productType = product.getProductType().getName();
         price = product.getPrice();
     }
 }

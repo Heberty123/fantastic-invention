@@ -24,6 +24,8 @@ public class ProductForm {
 
     private BrandForm brand;
 
+    private ProductTypeForm productType;
+
     private BigDecimal price;
 
     public Product toProduct(){
@@ -34,6 +36,7 @@ public class ProductForm {
                 this.reference,
                 this.barcode,
                 this.brand.toBrand(),
+                this.productType.toProductType(),
                 this.price
         );
     }

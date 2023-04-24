@@ -1,8 +1,10 @@
 package br.com.Loja.controllers;
 
 import br.com.Loja.dto.ProductDTO;
+import br.com.Loja.dto.ProductSimpleDTO;
 import br.com.Loja.dto.ProductTypeDTO;
 import br.com.Loja.form.ProductForm;
+import br.com.Loja.models.Product;
 import br.com.Loja.models.ProductType;
 import br.com.Loja.repositories.ProductRepository;
 import br.com.Loja.repositories.ProductTypeRepository;
@@ -20,8 +22,16 @@ public class ProductController {
     @Autowired
     private ProductRepository repository;
 
+    @GetMapping("/all")
+    public ResponseEntity<List<ProductSimpleDTO>> findAll(){
+        List<Product> products = this.repository.findAll();
+        List<ProductSimpleDTO> dtos = products.stream()
+                .map(ProductSimpleDTO::new)
+                .toList();
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
+    }
 
-    @PostMapping("/create")
+    @PostMapping("/")
     public ResponseEntity<ProductDTO> create(@RequestBody ProductForm productForm){
         ProductDTO dto = new ProductDTO(repository.save(productForm.toProduct()));
         return new ResponseEntity<>(dto, HttpStatus.CREATED);

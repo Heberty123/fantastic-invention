@@ -24,8 +24,11 @@ public class Product {
     private String reference;
 
     private Long barcode;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Brand brand;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ProductType productType;
 
     private BigDecimal price;
 }
