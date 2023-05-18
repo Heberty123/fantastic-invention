@@ -23,6 +23,7 @@ public class ProductType {
     @OneToMany(mappedBy = "productType", fetch = FetchType.LAZY)
     private List<Product> products = new ArrayList<Product>();
 
+
     public ProductType(Long id, String name){
         this.id = id;
         this.name = name;

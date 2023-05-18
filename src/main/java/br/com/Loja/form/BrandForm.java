@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 public class BrandForm {
 
     private Long id;
-
     private String name;
 
     public Brand toBrand(){

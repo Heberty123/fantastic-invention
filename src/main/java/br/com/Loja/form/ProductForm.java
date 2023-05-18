@@ -20,7 +20,7 @@ public class ProductForm {
 
     private String reference;
 
-    private Long barcode;
+    private String barcode;
 
     private BrandForm brand;
 

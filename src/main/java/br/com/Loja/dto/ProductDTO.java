@@ -21,7 +21,7 @@ public class ProductDTO {
 
     private String reference;
 
-    private Long barcode;
+    private String barcode;
 
     private String brand;
 

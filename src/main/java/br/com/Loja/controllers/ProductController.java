@@ -31,9 +31,20 @@ public class ProductController {
         return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
+
     @PostMapping("/")
     public ResponseEntity<ProductDTO> create(@RequestBody ProductForm productForm){
         ProductDTO dto = new ProductDTO(repository.save(productForm.toProduct()));
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/barcode/{barcode}")
+    public ResponseEntity<ProductDTO> findByBarcode(@PathVariable String barcode){
+        Product product = repository.findByBarcode(barcode);
+        if(product == null)
+            return ResponseEntity.notFound().build();
+
+        ProductDTO dto = new ProductDTO(product);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 }

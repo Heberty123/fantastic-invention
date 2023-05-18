@@ -65,12 +65,8 @@ public class CustomerController {
         Customer customer = this.repository.getReferenceById(customerId);
 
         Customer customerDependent = customerForm.toCustomer();
-        /*
-        customer.addCustomerDependent(customerDependent);
-         */
         customerDependent.setParentCustomer(customer);
         CustomerDTO dto = new CustomerDTO(this.repository.save(customerDependent));
-
 
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }

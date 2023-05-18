@@ -4,13 +4,13 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity(name = "product")
 public class Product {
 
     @Id
@@ -23,7 +23,8 @@ public class Product {
 
     private String reference;
 
-    private Long barcode;
+    @Column(unique = true)
+    private String barcode;
     @ManyToOne(fetch = FetchType.LAZY)
     private Brand brand;
 
@@ -31,4 +32,18 @@ public class Product {
     private ProductType productType;
 
     private BigDecimal price;
+
+    @OneToMany(mappedBy = "product")
+    private Set<ProductsOrders> productsOrders;
+
+    public Product(Long id, String name, String description, String reference, String barcode, Brand brand, ProductType productType, BigDecimal price) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.reference = reference;
+        this.barcode = barcode;
+        this.brand = brand;
+        this.productType = productType;
+        this.price = price;
+    }
 }

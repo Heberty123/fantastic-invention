@@ -27,8 +27,11 @@ public class Customer {
     @ManyToOne(fetch = FetchType.LAZY)
     private Customer parentCustomer;
 
-    @OneToMany(mappedBy = "parentCustomer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parentCustomer", fetch = FetchType.LAZY)
     private Set<Customer> customersDependents = new HashSet<Customer>();
+
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    private List<Order> orders = new ArrayList<Order>();
 
 
     public Customer(String name, String cpf) {
@@ -36,8 +39,4 @@ public class Customer {
         this.cpf = cpf;
     }
 
-    public void addCustomerDependent(Customer customer){
-        if(!this.customersDependents.contains(customer))
-            this.customersDependents.add(customer);
-    }
 }

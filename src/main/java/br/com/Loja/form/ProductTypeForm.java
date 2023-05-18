@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProductTypeForm {
 
-
     private Long id;
+
     private String name;
 
     public ProductType toProductType(){
