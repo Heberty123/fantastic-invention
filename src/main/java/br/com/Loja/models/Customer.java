@@ -2,7 +2,9 @@ package br.com.Loja.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -10,7 +12,8 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class Customer {
 
@@ -37,6 +40,10 @@ public class Customer {
     public Customer(String name, String cpf) {
         this.name = name;
         this.cpf = cpf;
+    }
+
+    public Customer(Long id){
+        this.id = id;
     }
 
 }

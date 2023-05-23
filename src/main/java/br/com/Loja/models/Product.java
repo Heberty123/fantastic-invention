@@ -1,13 +1,13 @@
 package br.com.Loja.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import java.math.BigDecimal;
 import java.util.Set;
 
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "product")
@@ -33,7 +33,7 @@ public class Product {
 
     private BigDecimal price;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
     private Set<ProductsOrders> productsOrders;
 
     public Product(Long id, String name, String description, String reference, String barcode, Brand brand, ProductType productType, BigDecimal price) {
@@ -45,5 +45,9 @@ public class Product {
         this.brand = brand;
         this.productType = productType;
         this.price = price;
+    }
+
+    public Product(Long id){
+        this.id = id;
     }
 }

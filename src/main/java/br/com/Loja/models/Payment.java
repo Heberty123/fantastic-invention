@@ -18,7 +18,7 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Date PaymentDate;
+    private Date paymentDate;
 
     private BigDecimal amount;
 

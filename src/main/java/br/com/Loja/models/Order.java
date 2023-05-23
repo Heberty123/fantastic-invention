@@ -1,16 +1,19 @@
 package br.com.Loja.models;
 
+import br.com.Loja.form.OrderForm;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-@Data
+@Setter
+@Getter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "orders")
@@ -22,12 +25,13 @@ public class Order {
 
     private String status;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
     private Set<ProductsOrders> productsOrders = new HashSet<ProductsOrders>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     private Customer customer;
 
     @OneToMany(mappedBy = "order")
     private List<Payment> payments = new ArrayList<Payment>();
+
 }
