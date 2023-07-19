@@ -45,7 +45,7 @@ public class OrderService {
                     .map(v ->
                             new ProductsOrders(
                                 order,
-                                new Product(v.getProductId()),
+                                new Product(v.getProduct().getId()),
                                 v.getQuantity(),
                                 v.getDiscounts(),
                                 v.getIsRefund()

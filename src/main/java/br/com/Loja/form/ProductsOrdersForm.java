@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class ProductsOrdersForm {
 
-    private Long productId;
+    private SimpleProductForm product;
 
     private Integer quantity;
 

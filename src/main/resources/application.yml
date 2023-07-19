@@ -8,5 +8,5 @@ spring:
     platform: postgres
     url: jdbc:postgresql://localhost:5432/loja
     username: postgres
-    password: Teste01@
+    password: admin
     driverClassName: org.postgresql.Driver
