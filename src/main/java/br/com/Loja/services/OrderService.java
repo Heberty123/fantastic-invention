@@ -6,12 +6,12 @@ import br.com.Loja.models.Customer;
 import br.com.Loja.models.Order;
 import br.com.Loja.models.Product;
 import br.com.Loja.models.ProductsOrders;
-import br.com.Loja.repositories.CustomerRepository;
 import br.com.Loja.repositories.OrderRepository;
-import br.com.Loja.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,11 +20,15 @@ public class OrderService {
     @Autowired
     private OrderRepository repository;
 
-    @Autowired
-    private CustomerRepository customerR;
 
-    @Autowired
-    private ProductRepository productR;
+    public Set<OrderDTO> findAllByCustomerId(Long customerId){
+        Set<Order> orders = repository.findAllByCustomerId(customerId);
+        Set<OrderDTO> dtos = orders
+                .stream()
+                .map(OrderDTO::new)
+                .collect(Collectors.toSet());
+        return dtos;
+    }
 
 
     public OrderDTO create(OrderForm orderForm){
@@ -32,6 +36,9 @@ public class OrderService {
         Order order = repository.save(new Order());
         order.setStatus(orderForm.getStatus());
         order.setCustomer(new Customer(orderForm.getCustomerId()));
+        order.setGrossAmount(orderForm.getGrossAmount());
+        order.setNetAmount(orderForm.getNetAmount());
+        order.setDiscounts(orderForm.getDiscounts());
         order.setProductsOrders(
                 orderForm.getProductsOrders()
                     .stream()
@@ -39,10 +46,13 @@ public class OrderService {
                             new ProductsOrders(
                                 order,
                                 new Product(v.getProductId()),
-                                v.getQuantity()
+                                v.getQuantity(),
+                                v.getDiscounts(),
+                                v.getIsRefund()
                     ))
                     .collect(Collectors.toSet())
         );
+        order.setCreatedAt(LocalDateTime.now());
 
         OrderDTO dto = new OrderDTO(this.repository.save(order));
 

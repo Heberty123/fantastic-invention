@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Getter
@@ -28,10 +29,17 @@ public class ProductsOrders {
 
     private Integer quantity;
 
-    public ProductsOrders(Order order, Product product, Integer quantity){
+    @Column(precision = 5, scale = 4)
+    private BigDecimal discounts;
+
+    private Boolean isRefund;
+
+    public ProductsOrders(Order order, Product product, Integer quantity, BigDecimal discounts, Boolean isRefund){
         this.order = order;
         this.product = product;
         this.quantity = quantity;
+        this.discounts = discounts;
+        this.isRefund = isRefund;
         this.id = new ProductsOrdersKey(order.getId(), product.getId());
     }
 
