@@ -28,16 +28,18 @@ public class Customer {
     private List<Address> addresses = new ArrayList<Address>();
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(updatable = false)
     private Customer parentCustomer;
 
     @OneToMany(mappedBy = "parentCustomer", fetch = FetchType.LAZY)
-    private Set<Customer> customersDependents = new HashSet<Customer>();
+    private Set<Customer> dependents = new HashSet<Customer>();
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<Order> orders = new ArrayList<Order>();
 
 
-    public Customer(String name, String cpf) {
+    public Customer(Long id, String name, String cpf) {
+        this.id = id;
         this.name = name;
         this.cpf = cpf;
     }

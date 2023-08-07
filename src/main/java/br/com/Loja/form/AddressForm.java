@@ -2,11 +2,17 @@ package br.com.Loja.form;
 
 import br.com.Loja.models.Address;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class AddressForm {
+
+    private Long id;
+
     private String street;
 
     private Integer number;
@@ -48,6 +54,7 @@ public class AddressForm {
 
     public Address toAddress() {
         return new Address(
+                id,
                 street,
                 number,
                 neighborhood,

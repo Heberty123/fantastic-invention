@@ -40,7 +40,7 @@ public class Order {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
     private Set<ProductsOrders> productsOrders = new HashSet<ProductsOrders>();
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<Payment> payments = new ArrayList<Payment>();
 
     private LocalDateTime createdAt;

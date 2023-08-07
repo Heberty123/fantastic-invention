@@ -1,13 +1,12 @@
 package br.com.Loja.dto;
 
 import br.com.Loja.models.Order;
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,6 +28,8 @@ public class OrderDTO {
 
     private Set<ProductsOrdersDTO> productsOrders;
 
+    private List<PaymentDTO> payments;
+
     private String createdAt;
 
     public OrderDTO(Order order){
@@ -48,6 +49,10 @@ public class OrderDTO {
                     );
                 })
                 .collect(Collectors.toSet());
+        this.payments = order.getPayments()
+                .stream()
+                .map(PaymentDTO::new)
+                .collect(Collectors.toList());
         this.createdAt = order.getCreatedAt().toString();
     }
 }

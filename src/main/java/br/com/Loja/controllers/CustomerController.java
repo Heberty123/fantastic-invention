@@ -1,6 +1,7 @@
 package br.com.Loja.controllers;
 
 import br.com.Loja.dto.CustomerDTO;
+import br.com.Loja.dto.FullCustomerDTO;
 import br.com.Loja.dto.SimpleCustomerDTO;
 import br.com.Loja.form.CustomerForm;
 import br.com.Loja.models.Customer;
@@ -32,13 +33,23 @@ public class CustomerController {
         return new ResponseEntity<>(dtos,HttpStatus.OK);
     }
 
-    @GetMapping("/{customerId}")
-    public ResponseEntity<CustomerDTO> findById(@PathVariable Long customerId){
-        Optional<Customer> optional = this.repository.findById(customerId);
+    @GetMapping("/{id}")
+    public ResponseEntity<CustomerDTO> findById(@PathVariable Long id){
+        Optional<Customer> optional = this.repository.findById(id);
         if(optional.isEmpty())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         CustomerDTO dto = new CustomerDTO(optional.get());
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    @GetMapping("/full/{id}")
+    public ResponseEntity<FullCustomerDTO> findFullById(@PathVariable Long id){
+        Optional<Customer> optional = this.repository.findById(id);
+        if(optional.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        FullCustomerDTO dto = new FullCustomerDTO(optional.get());
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
@@ -55,24 +66,22 @@ public class CustomerController {
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update/{customerId}")
-    public ResponseEntity<SimpleCustomerDTO> update(@RequestBody CustomerForm customerForm,
-                                                    @PathVariable Long customerId){
+    @PutMapping
+    public ResponseEntity<SimpleCustomerDTO> update(@RequestBody CustomerForm customerForm){
         Customer customer = customerForm.toCustomer();
-        customer.setId(customerId);
         SimpleCustomerDTO dto = new SimpleCustomerDTO(repository.save(customer));
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{customerId}")
-    public ResponseEntity<?> deleteById(@PathVariable Long customerId){
-        this.repository.deleteById(customerId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteById(@PathVariable Long id){
+        this.repository.deleteById(id);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/create/dependent/{customerId}")
-    public ResponseEntity<SimpleCustomerDTO> createDependent(@RequestBody CustomerForm customerForm, @PathVariable Long customerId){
-        Customer customer = this.repository.getReferenceById(customerId);
+    @PostMapping("/create/dependent/{id}")
+    public ResponseEntity<SimpleCustomerDTO> createDependent(@RequestBody CustomerForm customerForm, @PathVariable Long id){
+        Customer customer = this.repository.getReferenceById(id);
 
         Customer customerDependent = customerForm.toCustomer();
         customerDependent.setParentCustomer(customer);
@@ -81,9 +90,9 @@ public class CustomerController {
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
-    @GetMapping("/all/dependentsCustomers/{customerId}")
-    public ResponseEntity<List<SimpleCustomerDTO>> findAllDependentsCustomers(@PathVariable Long customerId){
-        List<Customer> customer = this.repository.findAllByParentCustomerId(customerId);
+    @GetMapping("/all/dependentsCustomers/{id}")
+    public ResponseEntity<List<SimpleCustomerDTO>> findAllDependentsCustomers(@PathVariable Long id){
+        List<Customer> customer = this.repository.findAllByParentCustomerId(id);
         List<SimpleCustomerDTO> dtos = customer.stream()
                 .map(SimpleCustomerDTO::new)
                 .toList();

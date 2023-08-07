@@ -40,12 +40,14 @@ public class Address {
     private String telephone2;
 
     @ManyToOne
+    @JoinColumn(updatable = false)
     private Customer customer;
 
 
-    public Address(String street, Integer number, String neighborhood, String city, String uf,
+    public Address(Long id, String street, Integer number, String neighborhood, String city, String uf,
                    String cep, DeliveryType deliveryType, String cellphone1, String cellphone2,
                    String telephone1, String telephone2) {
+        this.id = id;
         this.street = street;
         this.number = number;
         this.neighborhood = neighborhood;
@@ -57,5 +59,24 @@ public class Address {
         this.cellphone2 = cellphone2;
         this.telephone1 = telephone1;
         this.telephone2 = telephone2;
+    }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "id=" + id +
+                ", street='" + street + '\'' +
+                ", number=" + number +
+                ", neighborhood='" + neighborhood + '\'' +
+                ", city='" + city + '\'' +
+                ", uf='" + uf + '\'' +
+                ", cep='" + cep + '\'' +
+                ", deliveryType=" + deliveryType +
+                ", cellphone1='" + cellphone1 + '\'' +
+                ", cellphone2='" + cellphone2 + '\'' +
+                ", telephone1='" + telephone1 + '\'' +
+                ", telephone2='" + telephone2 + '\'' +
+                ", customer=" + customer +
+                '}';
     }
 }

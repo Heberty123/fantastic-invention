@@ -49,6 +49,14 @@ public class AddressController {
     }
 
 
+    @PutMapping
+    public ResponseEntity<AddressDTO> update(@RequestBody AddressForm addressForm){
+
+        Address address = addressForm.toAddress();
+        address = this.addressRepository.save(address);
+        return ResponseEntity.ok(new AddressDTO(address));
+    }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id){
 

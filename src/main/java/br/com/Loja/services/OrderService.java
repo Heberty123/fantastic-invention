@@ -2,10 +2,7 @@ package br.com.Loja.services;
 
 import br.com.Loja.dto.OrderDTO;
 import br.com.Loja.form.OrderForm;
-import br.com.Loja.models.Customer;
-import br.com.Loja.models.Order;
-import br.com.Loja.models.Product;
-import br.com.Loja.models.ProductsOrders;
+import br.com.Loja.models.*;
 import br.com.Loja.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,6 +48,22 @@ public class OrderService {
                                 v.getIsRefund()
                     ))
                     .collect(Collectors.toSet())
+        );
+        order.setPayments(
+                orderForm.getPayments()
+                    .stream()
+                    .map(v ->
+                            new Payment(
+                                    null,
+                                    v.getPaymentDate(),
+                                    v.getAmount(),
+                                    v.getPaymentType() != null ?
+                                            new PaymentType(v.getPaymentType().getId())
+                                            :
+                                            null,
+                                    order
+                            ))
+                    .collect(Collectors.toList())
         );
         order.setCreatedAt(LocalDateTime.now());
 

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CustomerForm {
 
+    private Long id;
     private String name;
 
     private String cpf;
@@ -19,7 +20,7 @@ public class CustomerForm {
     }
 
     public Customer toCustomer() {
-        return new Customer(name, cpf);
+        return new Customer(id, name, cpf);
     }
 
 }
