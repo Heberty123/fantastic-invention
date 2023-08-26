@@ -1,11 +1,12 @@
 package br.com.Loja.controllers;
 
 import br.com.Loja.dto.CustomerDTO;
-import br.com.Loja.dto.FullCustomerDTO;
 import br.com.Loja.dto.SimpleCustomerDTO;
 import br.com.Loja.form.CustomerForm;
 import br.com.Loja.models.Customer;
 import br.com.Loja.repositories.CustomerRepository;
+import br.com.Loja.services.CustomerService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,9 @@ public class CustomerController {
 
     @Autowired
     private CustomerRepository repository;
+
+    @Autowired
+    private CustomerService service;
 
     @GetMapping("/all")
     public ResponseEntity<List<SimpleCustomerDTO>> findAll(){
@@ -40,16 +44,6 @@ public class CustomerController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         CustomerDTO dto = new CustomerDTO(optional.get());
-        return new ResponseEntity<>(dto, HttpStatus.OK);
-    }
-
-    @GetMapping("/full/{id}")
-    public ResponseEntity<FullCustomerDTO> findFullById(@PathVariable Long id){
-        Optional<Customer> optional = this.repository.findById(id);
-        if(optional.isEmpty())
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        FullCustomerDTO dto = new FullCustomerDTO(optional.get());
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 

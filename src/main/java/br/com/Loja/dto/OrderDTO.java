@@ -18,7 +18,7 @@ public class OrderDTO {
 
     private Long id;
 
-    private String status;
+    private boolean paid;
 
     private BigDecimal netAmount;
 
@@ -34,7 +34,7 @@ public class OrderDTO {
 
     public OrderDTO(Order order){
         this.id = order.getId();
-        this.status = order.getStatus();
+        this.paid = order.isPaid();
         this.netAmount = order.getNetAmount();
         this.grossAmount = order.getGrossAmount();
         this.discounts = order.getDiscounts();

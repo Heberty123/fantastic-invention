@@ -17,11 +17,11 @@ public class OrderController {
     private OrderService service;
 
 
-    @GetMapping("/customer/{customerId}")
-    public ResponseEntity<Set<OrderDTO>> find(@PathVariable Long customerId){
+    @GetMapping("/customer/{customerId}/{paid}")
+    public ResponseEntity<Set<OrderDTO>> find(@PathVariable Long customerId, @PathVariable boolean paid){
 
         Set<OrderDTO> dtos =
-                this.service.findAllByCustomerId(customerId);
+                this.service.findAllByCustomerId(customerId, paid);
 
         if(dtos.isEmpty())
             return ResponseEntity.notFound().build();

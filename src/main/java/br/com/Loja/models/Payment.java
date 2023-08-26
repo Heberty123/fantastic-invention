@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Calendar;
-import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -25,6 +25,13 @@ public class Payment {
 
     @ManyToOne(cascade = CascadeType.ALL)
     private PaymentType paymentType;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime payedAt;
+
+    private BigDecimal amountPayed;
+
+    private Boolean paid;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Order order;

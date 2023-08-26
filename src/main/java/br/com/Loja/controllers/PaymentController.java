@@ -1,11 +1,9 @@
 package br.com.Loja.controllers;
 
 import br.com.Loja.dto.PaymentDTO;
-import br.com.Loja.dto.PaymentTypeDTO;
-import br.com.Loja.models.Payment;
-import br.com.Loja.models.PaymentType;
-import br.com.Loja.repositories.PaymentRepository;
+import br.com.Loja.services.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,23 +16,16 @@ import java.util.List;
 public class PaymentController {
 
     @Autowired
-    private PaymentRepository repository;
+    private PaymentService service;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<List<PaymentDTO>> findAll(@PathVariable Long id){
+    @GetMapping("/{id}/{paid}")
+    public ResponseEntity<List<PaymentDTO>> findAllUnpaids(@PathVariable Long id, @PathVariable boolean paid){
 
-        List<Payment> payments =
-                this.repository.findAllByOrderCustomerId(id);
+        List<PaymentDTO> dtos = this.service.getPaymentsByCustomerId(id, paid);
 
-        if(payments.isEmpty())
+        if(dtos.isEmpty())
             return ResponseEntity.notFound().build();
 
-
-        List<PaymentDTO> dtos =
-                payments.stream()
-                        .map(PaymentDTO::new)
-                        .toList();
-
-        return ResponseEntity.ok(dtos);
+        return new ResponseEntity<List<PaymentDTO>>(dtos, HttpStatus.OK);
     }
 }

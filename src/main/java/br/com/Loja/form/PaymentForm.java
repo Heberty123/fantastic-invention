@@ -2,8 +2,8 @@ package br.com.Loja.form;
 
 import lombok.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Calendar;
-import java.util.Date;
 
 @Setter
 @Getter
@@ -18,5 +18,11 @@ public class PaymentForm {
     private Calendar paymentDate;
 
     private PaymentTypeForm paymentType;
+
+    private LocalDateTime payedAt;
+
+    private BigDecimal amountPayed;
+
+    private Boolean paid;
 
 }

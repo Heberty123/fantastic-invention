@@ -1,11 +1,9 @@
 package br.com.Loja.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -31,10 +29,10 @@ public class Customer {
     @JoinColumn(updatable = false)
     private Customer parentCustomer;
 
-    @OneToMany(mappedBy = "parentCustomer", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "parentCustomer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Customer> dependents = new HashSet<Customer>();
 
-    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<Order>();
 
 

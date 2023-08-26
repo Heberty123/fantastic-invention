@@ -6,7 +6,6 @@ import br.com.Loja.models.*;
 import br.com.Loja.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,8 +17,8 @@ public class OrderService {
     private OrderRepository repository;
 
 
-    public Set<OrderDTO> findAllByCustomerId(Long customerId){
-        Set<Order> orders = repository.findAllByCustomerId(customerId);
+    public Set<OrderDTO> findAllByCustomerId(Long customerId, boolean paid){
+        Set<Order> orders = repository.findAllByCustomerId(customerId, paid);
         Set<OrderDTO> dtos = orders
                 .stream()
                 .map(OrderDTO::new)
@@ -31,7 +30,7 @@ public class OrderService {
     public OrderDTO create(OrderForm orderForm){
 
         Order order = repository.save(new Order());
-        order.setStatus(orderForm.getStatus());
+        order.setPaid(orderForm.isPaid());
         order.setCustomer(new Customer(orderForm.getCustomerId()));
         order.setGrossAmount(orderForm.getGrossAmount());
         order.setNetAmount(orderForm.getNetAmount());
@@ -58,14 +57,21 @@ public class OrderService {
                                     v.getPaymentDate(),
                                     v.getAmount(),
                                     v.getPaymentType() != null ?
-                                            new PaymentType(v.getPaymentType().getId())
+                                            v.getPaymentType().toPaymentType()
                                             :
                                             null,
+                                    v.getAmountPayed() != null ?
+                                            LocalDateTime.now()
+                                            :
+                                            v.getPayedAt(),
+                                    v.getAmountPayed(),
+                                    v.getPaid(),
                                     order
                             ))
                     .collect(Collectors.toList())
         );
         order.setCreatedAt(LocalDateTime.now());
+        System.out.println(order.getPayments());
 
         OrderDTO dto = new OrderDTO(this.repository.save(order));
 

@@ -1,18 +1,13 @@
 package br.com.Loja.models;
 
-import br.com.Loja.form.OrderForm;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Digits;
 import lombok.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Setter
 @Getter
@@ -25,7 +20,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String status;
+    private boolean paid;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Customer customer;

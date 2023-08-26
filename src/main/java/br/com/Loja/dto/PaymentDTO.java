@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Calendar;
-import java.util.Date;
 
 @Setter
 @Getter
@@ -21,6 +21,12 @@ public class PaymentDTO {
 
     private PaymentTypeDTO paymentType;
 
+    private LocalDateTime payedAt;
+
+    private BigDecimal amountPayed;
+
+    private Boolean paid;
+
     public PaymentDTO(Payment payment) {
         this.id = payment.getId();
         this.amount = payment.getAmount();
@@ -29,5 +35,8 @@ public class PaymentDTO {
                 new PaymentTypeDTO(payment.getPaymentType())
                 :
                 null;
+        this.payedAt = payment.getPayedAt();
+        this.amountPayed = payment.getAmountPayed();
+        this.paid = payment.getPaid();
     }
 }

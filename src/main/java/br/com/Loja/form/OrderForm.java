@@ -14,7 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class OrderForm {
 
-    private String status;
+    private boolean paid;
 
     private Long customerId;
 

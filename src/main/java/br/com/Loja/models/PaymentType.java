@@ -1,8 +1,6 @@
 package br.com.Loja.models;
 
 
-import br.com.Loja.dto.PaymentTypeDTO;
-import br.com.Loja.form.PaymentTypeForm;
 import jakarta.persistence.*;
 import lombok.*;
 
