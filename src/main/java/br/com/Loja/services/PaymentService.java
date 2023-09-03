@@ -2,10 +2,13 @@ package br.com.Loja.services;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import br.com.Loja.dto.PaymentDTO;
+import br.com.Loja.form.PaymentForm;
 import br.com.Loja.models.Payment;
 import br.com.Loja.repositories.PaymentRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class PaymentService {
@@ -21,5 +24,14 @@ public class PaymentService {
         return payments.stream()
                         .map(PaymentDTO::new)
                         .toList();
+    }
+
+    @Transactional
+    public PaymentDTO payNow(PaymentForm paymentForm){
+            this.repository.payNow(paymentForm.getPaymentType().toPaymentType(),
+                                   paymentForm.getAmountPayed(),
+                                   paymentForm.getId());
+        
+        return new PaymentDTO(paymentForm.toPayment());
     }
 }

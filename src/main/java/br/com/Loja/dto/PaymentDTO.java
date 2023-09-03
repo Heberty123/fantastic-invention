@@ -18,13 +18,9 @@ public class PaymentDTO {
     private Long id;
     private BigDecimal amount;
     private Calendar paymentDate;
-
     private PaymentTypeDTO paymentType;
-
     private LocalDateTime payedAt;
-
     private BigDecimal amountPayed;
-
     private Boolean paid;
 
     public PaymentDTO(Payment payment) {
