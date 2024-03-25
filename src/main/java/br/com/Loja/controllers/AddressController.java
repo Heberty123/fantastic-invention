@@ -1,17 +1,16 @@
 package br.com.Loja.controllers;
 
-import br.com.Loja.dto.AddressDTO;
-import br.com.Loja.form.AddressForm;
+import br.com.Loja.dtos.AddressDTO;
+import br.com.Loja.forms.AddressForm;
 import br.com.Loja.models.Address;
 import br.com.Loja.models.Customer;
 import br.com.Loja.repositories.AddressRepository;
-import br.com.Loja.repositories.CustomerRepository;
+import br.com.Loja.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/address")
@@ -21,19 +20,15 @@ public class AddressController {
     private AddressRepository addressRepository;
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private CustomerService customerService;
 
 
     @PostMapping("/create/{customerId}")
     public ResponseEntity<AddressDTO> create(@RequestBody AddressForm addressForm, @PathVariable Long customerId){
 
         Address address = addressForm.toAddress();
-        Optional<Customer> optional = customerRepository.findById(customerId);
-
-        if(optional.isEmpty())
-            return ResponseEntity.notFound().build();
-
-        address.setCustomer(optional.get());
+        Customer customer = customerService.getById(customerId);
+        address.setCustomer(customer);
         AddressDTO dto = new AddressDTO(addressRepository.save(address));
         return ResponseEntity.created(null).body(dto);
     }
@@ -41,11 +36,8 @@ public class AddressController {
     @GetMapping("/all/{customerId}")
     public ResponseEntity<List<AddressDTO>> findAllByCustomer(@PathVariable Long customerId){
         List<Address> addresses = this.addressRepository.findAllByCustomerId(customerId);
-        if(!addresses.isEmpty()){
-            List<AddressDTO> addressesDTOS = addresses.stream().map(AddressDTO::new).toList();
-            return new ResponseEntity<>(addressesDTOS, HttpStatus.OK);
-        }
-        return ResponseEntity.notFound().build();
+        List<AddressDTO> addressesDTOS = addresses.stream().map(AddressDTO::new).toList();
+        return new ResponseEntity<>(addressesDTOS, HttpStatus.OK);
     }
 
 

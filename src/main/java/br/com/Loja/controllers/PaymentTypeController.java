@@ -1,7 +1,7 @@
 package br.com.Loja.controllers;
 
-import br.com.Loja.dto.PaymentTypeDTO;
-import br.com.Loja.form.PaymentTypeForm;
+import br.com.Loja.dtos.PaymentTypeDTO;
+import br.com.Loja.forms.PaymentTypeForm;
 import br.com.Loja.models.PaymentType;
 import br.com.Loja.repositories.PaymentTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;

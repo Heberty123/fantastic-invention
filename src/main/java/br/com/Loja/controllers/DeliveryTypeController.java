@@ -1,7 +1,7 @@
 package br.com.Loja.controllers;
 
-import br.com.Loja.dto.DeliveryTypeDTO;
-import br.com.Loja.form.DeliveryTypeForm;
+import br.com.Loja.dtos.DeliveryTypeDTO;
+import br.com.Loja.forms.DeliveryTypeForm;
 import br.com.Loja.models.DeliveryType;
 import br.com.Loja.repositories.DeliveryTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;

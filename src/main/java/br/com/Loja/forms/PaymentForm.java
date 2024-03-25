@@ -1,4 +1,4 @@
-package br.com.Loja.form;
+package br.com.Loja.forms;
 
 import lombok.*;
 import java.math.BigDecimal;
@@ -39,5 +39,4 @@ public class PaymentForm {
             null
             );
     }
-
 }

@@ -1,9 +1,11 @@
 package br.com.Loja.controllers;
 
-import br.com.Loja.dto.BrandDTO;
-import br.com.Loja.form.BrandForm;
+import br.com.Loja.dtos.BrandDTO;
+import br.com.Loja.dtos.BrandFinalValueDTO;
+import br.com.Loja.forms.BrandForm;
 import br.com.Loja.models.Brand;
 import br.com.Loja.repositories.BrandRepository;
+import br.com.Loja.services.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,14 +18,14 @@ import java.util.List;
 public class BrandController {
 
     @Autowired
+    private BrandService service;
+
+    @Autowired
     private BrandRepository repository;
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<BrandDTO>> findAll(){
         List<Brand> brands = this.repository.findAll();
-
-        if(brands.isEmpty())
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 
         List<BrandDTO> dtos = brands.stream()
                 .map(BrandDTO::new)
@@ -31,11 +33,18 @@ public class BrandController {
         return new ResponseEntity<>(dtos,HttpStatus.OK);
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<BrandDTO> create(@RequestBody BrandForm brandForm){
+    @PostMapping
+    public ResponseEntity<BrandDTO> save(@RequestBody BrandForm brandForm){
 
         Brand brand = brandForm.toBrand();
         BrandDTO dto = new BrandDTO(this.repository.save(brand));
         return new ResponseEntity<>(dto,HttpStatus.OK);
+    }
+
+    @GetMapping("/brandFinalValue")
+    public ResponseEntity<List<BrandFinalValueDTO>> brandFinalValue() {
+        List<BrandFinalValueDTO> dtos = service.findAllFinalValue();
+        System.out.println(dtos);
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 }

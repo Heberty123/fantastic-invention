@@ -1,4 +1,4 @@
-package br.com.Loja.form;
+package br.com.Loja.forms;
 
 import br.com.Loja.models.DeliveryType;
 import lombok.Data;

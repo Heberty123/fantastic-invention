@@ -1,10 +1,12 @@
 package br.com.Loja.controllers;
 
-import br.com.Loja.dto.ProductDTO;
-import br.com.Loja.dto.SimpleProductDTO;
-import br.com.Loja.form.ProductForm;
+import br.com.Loja.dtos.ProductDTO;
+import br.com.Loja.dtos.ProductFinalValueDTO;
+import br.com.Loja.dtos.SimpleProductDTO;
+import br.com.Loja.forms.ProductForm;
 import br.com.Loja.models.Product;
 import br.com.Loja.repositories.ProductRepository;
+import br.com.Loja.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("api/product")
 public class ProductController {
+
+    @Autowired
+    private ProductService service;
 
     @Autowired
     private ProductRepository repository;
@@ -42,7 +47,7 @@ public class ProductController {
     }
 
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<ProductDTO> create(@RequestBody ProductForm productForm){
         ProductDTO dto = new ProductDTO(repository.save(productForm.toProduct()));
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
@@ -57,4 +62,11 @@ public class ProductController {
         ProductDTO dto = new ProductDTO(product);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
+
+    @GetMapping("/productFinalValue")
+    public ResponseEntity<List<ProductFinalValueDTO>> findAllFinalValue() {
+        return new ResponseEntity<>(service.findAllFinalValue(), HttpStatus.OK);
+    }
+
+
 }

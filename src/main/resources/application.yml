@@ -4,9 +4,14 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+      jdbc:
+        time_zone: UTC
   datasource:
-    platform: postgres
     url: jdbc:postgresql://localhost:5433/Loja
     username: postgres
     password: postgres
     driverClassName: org.postgresql.Driver
+  sql:
+    init:
+      platform: postgres
+

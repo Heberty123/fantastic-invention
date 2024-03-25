@@ -1,13 +1,10 @@
-package br.com.Loja.dto;
+package br.com.Loja.dtos;
 
 
-import br.com.Loja.models.Address;
-import br.com.Loja.models.Brand;
+import java.math.BigDecimal;
 import br.com.Loja.models.Product;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor

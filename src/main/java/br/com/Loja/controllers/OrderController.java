@@ -1,7 +1,7 @@
 package br.com.Loja.controllers;
 
-import br.com.Loja.dto.OrderDTO;
-import br.com.Loja.form.OrderForm;
+import br.com.Loja.dtos.OrderDTO;
+import br.com.Loja.forms.OrderForm;
 import br.com.Loja.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +22,6 @@ public class OrderController {
 
         Set<OrderDTO> dtos =
                 this.service.findAllByCustomerId(customerId, paid);
-
-        if(dtos.isEmpty())
-            return ResponseEntity.notFound().build();
 
         return ResponseEntity.ok(dtos);
     }

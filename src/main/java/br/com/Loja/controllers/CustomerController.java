@@ -1,21 +1,30 @@
 package br.com.Loja.controllers;
 
-import br.com.Loja.dto.CustomerDTO;
-import br.com.Loja.dto.SimpleCustomerDTO;
-import br.com.Loja.form.CustomerForm;
-import br.com.Loja.models.Customer;
-import br.com.Loja.repositories.CustomerRepository;
-import br.com.Loja.services.CustomerService;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
-import java.util.Optional;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.github.fge.jsonpatch.JsonPatchException;
+
+import br.com.Loja.dtos.CustomerDTO;
+import br.com.Loja.forms.CustomerForm;
+import br.com.Loja.repositories.CustomerRepository;
+import br.com.Loja.services.CustomerService;
 
 @RestController
-@RequestMapping("api/customer")
+@RequestMapping("api/customers")
 public class CustomerController {
 
     @Autowired
@@ -24,74 +33,76 @@ public class CustomerController {
     @Autowired
     private CustomerService service;
 
-    @GetMapping("/all")
-    public ResponseEntity<List<SimpleCustomerDTO>> findAll(){
-        List<Customer> customers = this.repository.findAll();
+    @GetMapping
+    public ResponseEntity<List<CustomerDTO>> findAll(){
 
-        if(customers.isEmpty())
-            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
-
-        List<SimpleCustomerDTO> dtos = customers.stream()
-                .map(SimpleCustomerDTO::new)
-                .toList();
+        List<CustomerDTO> dtos = service.findAll()
+            .stream()
+            .map(CustomerDTO::new)
+            .toList();
         return new ResponseEntity<>(dtos,HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CustomerDTO> findById(@PathVariable Long id){
-        Optional<Customer> optional = this.repository.findById(id);
-        if(optional.isEmpty())
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        CustomerDTO dto = new CustomerDTO(optional.get());
+        CustomerDTO dto =
+            new CustomerDTO(service.getById(id));
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-    @GetMapping("/exist/{cpf}")
+    @GetMapping("/{cpf}")
     public ResponseEntity<Boolean> existByCPF(@PathVariable String cpf){
         if(this.repository.existsByCpf(cpf))
             return new ResponseEntity<>(true, HttpStatus.OK);
         return new ResponseEntity<>(false, HttpStatus.OK);
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<SimpleCustomerDTO> create(@RequestBody CustomerForm customerForm){
-        SimpleCustomerDTO dto = new SimpleCustomerDTO(repository.save(customerForm.toCustomer()));
-        return new ResponseEntity<>(dto, HttpStatus.CREATED);
+    @PostMapping
+    public ResponseEntity<CustomerDTO> save(@RequestBody CustomerForm form){
+        return new ResponseEntity<>(
+            new CustomerDTO(service.save(form)),
+            HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<SimpleCustomerDTO> update(@RequestBody CustomerForm customerForm){
-        Customer customer = customerForm.toCustomer();
-        SimpleCustomerDTO dto = new SimpleCustomerDTO(repository.save(customer));
-        return new ResponseEntity<>(dto, HttpStatus.OK);
+    public ResponseEntity<CustomerDTO> update(@RequestBody CustomerForm form){
+        return new ResponseEntity<>(
+            new CustomerDTO(service.save(form)),
+            HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id){
-        this.repository.deleteById(id);
-        return ResponseEntity.ok().build();
+        service.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/create/dependent/{id}")
-    public ResponseEntity<SimpleCustomerDTO> createDependent(@RequestBody CustomerForm customerForm, @PathVariable Long id){
-        Customer customer = this.repository.getReferenceById(id);
+    @PostMapping("/{id}/dependents")
+    public ResponseEntity<CustomerDTO> saveDependent(
+        @RequestBody CustomerForm form,
+        @PathVariable Long id){
 
-        Customer customerDependent = customerForm.toCustomer();
-        customerDependent.setParentCustomer(customer);
-        SimpleCustomerDTO dto = new SimpleCustomerDTO(this.repository.save(customerDependent));
-
+        CustomerDTO dto = 
+            new CustomerDTO(service.saveDependent(form, id));
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
-    @GetMapping("/all/dependentsCustomers/{id}")
-    public ResponseEntity<List<SimpleCustomerDTO>> findAllDependentsCustomers(@PathVariable Long id){
-        List<Customer> customer = this.repository.findAllByParentCustomerId(id);
-        List<SimpleCustomerDTO> dtos = customer.stream()
-                .map(SimpleCustomerDTO::new)
-                .toList();
-
+    @GetMapping("/{id}/dependents")
+    public ResponseEntity<List<CustomerDTO>> findAllDependents(@PathVariable Long id){
+        List<CustomerDTO> dtos = 
+            service.findAllDependents(id)
+            .stream()
+            .map(CustomerDTO::new)
+            .toList();
         return new ResponseEntity<>(dtos, HttpStatus.OK);
+    }
+
+
+    @PatchMapping("/deleteAllByIds")
+    public ResponseEntity<Void> deleteList(
+        @RequestBody Map<String, List<Long>> map) throws JsonPatchException{
+        service.deleteList(map.get("ids"));
+        return ResponseEntity.noContent().build();
     }
 
 }

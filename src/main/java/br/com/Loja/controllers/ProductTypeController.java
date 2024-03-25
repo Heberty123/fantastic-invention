@@ -1,10 +1,10 @@
 package br.com.Loja.controllers;
 
-import br.com.Loja.dto.ProductTypeDTO;
-import br.com.Loja.form.ProductForm;
-import br.com.Loja.form.ProductTypeForm;
+import br.com.Loja.dtos.ProductTypeDTO;
+import br.com.Loja.forms.ProductTypeForm;
 import br.com.Loja.models.ProductType;
 import br.com.Loja.repositories.ProductTypeRepository;
+import br.com.Loja.services.ProductTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +15,9 @@ import java.util.List;
 @RestController
 @RequestMapping("api/productType")
 public class ProductTypeController {
+
+    @Autowired
+    private ProductTypeService service;
 
     @Autowired
     private ProductTypeRepository repository;
@@ -32,8 +35,8 @@ public class ProductTypeController {
         return new ResponseEntity<>(dtos,HttpStatus.OK);
     }
 
-    @PostMapping("/")
-    public ResponseEntity<ProductTypeDTO> create(@RequestBody ProductTypeForm productTypeForm){
+    @PostMapping
+    public ResponseEntity<ProductTypeDTO> save(@RequestBody ProductTypeForm productTypeForm){
         ProductType productType = productTypeForm.toProductType();
 
         ProductTypeDTO dto = new ProductTypeDTO(this.repository.save(productType));
@@ -46,6 +49,7 @@ public class ProductTypeController {
 
         this.repository.deleteById(id);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 }

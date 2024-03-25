@@ -1,4 +1,4 @@
-package br.com.Loja.dto;
+package br.com.Loja.dtos;
 
 import br.com.Loja.models.Order;
 import lombok.AllArgsConstructor;
@@ -26,7 +26,7 @@ public class OrderDTO {
 
     private BigDecimal discounts;
 
-    private Set<ProductsOrdersDTO> productsOrders;
+    private Set<ProductOrdersDTO> productOrders;
 
     private List<PaymentDTO> payments;
 
@@ -38,11 +38,13 @@ public class OrderDTO {
         this.netAmount = order.getNetAmount();
         this.grossAmount = order.getGrossAmount();
         this.discounts = order.getDiscounts();
-        this.productsOrders = order.getProductsOrders()
+        this.productOrders = order.getProductOrders()
                 .stream()
                 .map(v -> {
-                    return new ProductsOrdersDTO(
+                    return new ProductOrdersDTO(
                             v.getProduct(),
+                            v.getNetAmount(),
+                            v.getGrossAmount(),
                             v.getQuantity(),
                             v.getDiscounts(),
                             v.getIsRefund()

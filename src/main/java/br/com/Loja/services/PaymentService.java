@@ -1,20 +1,35 @@
 package br.com.Loja.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
+import br.com.Loja.exception.EntityNotFoundException;
+import br.com.Loja.dtos.CustomerPaymentDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import br.com.Loja.dto.PaymentDTO;
-import br.com.Loja.form.PaymentForm;
+
+import br.com.Loja.dtos.PaymentDTO;
+import br.com.Loja.forms.PaymentForm;
 import br.com.Loja.models.Payment;
 import br.com.Loja.repositories.PaymentRepository;
-import jakarta.transaction.Transactional;
 
 @Service
 public class PaymentService {
     
     @Autowired
     private PaymentRepository repository;
+
+    @Autowired
+    private OrderService orderService;
+
+    public Payment getById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Payment", id));
+    }
+
+    public List<CustomerPaymentDTO> getPaymentsToday() {
+        return repository.findAllByCurrentPaymentDate();
+    }
 
     public List<PaymentDTO> getPaymentsByCustomerId(Long id, boolean paid){
 
@@ -26,12 +41,17 @@ public class PaymentService {
                         .toList();
     }
 
-    @Transactional
     public PaymentDTO payNow(PaymentForm paymentForm){
-            this.repository.payNow(paymentForm.getPaymentType().toPaymentType(),
-                                   paymentForm.getAmountPayed(),
-                                   paymentForm.getId());
-        
-        return new PaymentDTO(paymentForm.toPayment());
+
+        Payment payment = getById(paymentForm.getId());
+        payment.setPaymentType(paymentForm.getPaymentType().toPaymentType());
+        payment.setAmountPayed(paymentForm.getAmountPayed());
+        payment.setPayedAt(LocalDateTime.now());
+        payment.setPaid(true);
+        payment = repository.save(payment);
+        orderService.validOrderPaymentById(payment.getOrder().getId());
+        return new PaymentDTO(payment);
     }
+
+
 }

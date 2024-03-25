@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import br.com.Loja.forms.CustomerForm;
+
 @Entity
 @Getter
 @Setter
@@ -25,7 +27,7 @@ public class Customer {
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Address> addresses = new ArrayList<Address>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(updatable = false)
     private Customer parentCustomer;
 
@@ -36,10 +38,10 @@ public class Customer {
     private List<Order> orders = new ArrayList<Order>();
 
 
-    public Customer(Long id, String name, String cpf) {
-        this.id = id;
-        this.name = name;
-        this.cpf = cpf;
+    public Customer(CustomerForm form) {
+        this.id = form.id();
+        this.name = form.name();
+        this.cpf = form.cpf();
     }
 
     public Customer(Long id){

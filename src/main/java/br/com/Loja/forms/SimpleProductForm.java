@@ -1,4 +1,4 @@
-package br.com.Loja.form;
+package br.com.Loja.forms;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

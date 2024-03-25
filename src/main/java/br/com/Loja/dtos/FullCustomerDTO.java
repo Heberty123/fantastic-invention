@@ -1,4 +1,4 @@
-package br.com.Loja.dto;
+package br.com.Loja.dtos;
 
 import br.com.Loja.models.Customer;
 import lombok.AllArgsConstructor;

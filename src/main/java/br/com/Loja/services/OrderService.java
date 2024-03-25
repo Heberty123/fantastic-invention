@@ -1,7 +1,8 @@
 package br.com.Loja.services;
 
-import br.com.Loja.dto.OrderDTO;
-import br.com.Loja.form.OrderForm;
+import br.com.Loja.dtos.OrderDTO;
+import br.com.Loja.exception.EntityNotFoundException;
+import br.com.Loja.forms.OrderForm;
 import br.com.Loja.models.*;
 import br.com.Loja.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,11 @@ public class OrderService {
 
     @Autowired
     private OrderRepository repository;
+
+    public Order getById(Long id) {
+        return this.repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Order", id));
+    }
 
 
     public Set<OrderDTO> findAllByCustomerId(Long customerId, boolean paid){
@@ -35,13 +41,15 @@ public class OrderService {
         order.setGrossAmount(orderForm.getGrossAmount());
         order.setNetAmount(orderForm.getNetAmount());
         order.setDiscounts(orderForm.getDiscounts());
-        order.setProductsOrders(
-                orderForm.getProductsOrders()
+        order.setProductOrders(
+                orderForm.getProductOrders()
                     .stream()
                     .map(v ->
                             new ProductsOrders(
                                 order,
                                 new Product(v.getProduct().getId()),
+                                v.getNetAmount(),
+                                v.getGrossAmount(),
                                 v.getQuantity(),
                                 v.getDiscounts(),
                                 v.getIsRefund()
@@ -76,5 +84,13 @@ public class OrderService {
         OrderDTO dto = new OrderDTO(this.repository.save(order));
 
         return dto;
+    }
+
+    public void validOrderPaymentById(Long id) {
+        Order order = getById(id);
+        if(order.getPayments().stream().allMatch(Payment::getPaid)) {
+            order.setPaid(true);
+            repository.save(order);
+        }
     }
 }

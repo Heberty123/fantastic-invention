@@ -1,7 +1,6 @@
-package br.com.Loja.form;
+package br.com.Loja.forms;
 
 import br.com.Loja.models.Address;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

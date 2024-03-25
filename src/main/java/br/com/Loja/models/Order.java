@@ -32,10 +32,10 @@ public class Order {
     @Column(precision = 5, scale = 4)
     private BigDecimal discounts;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
-    private Set<ProductsOrders> productsOrders = new HashSet<ProductsOrders>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order", fetch = FetchType.LAZY)
+    private Set<ProductsOrders> productOrders = new HashSet<>();
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Payment> payments = new ArrayList<Payment>();
 
     private LocalDateTime createdAt;

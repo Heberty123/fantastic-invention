@@ -1,6 +1,5 @@
 package br.com.Loja.repositories;
 
-import br.com.Loja.dto.AddressDTO;
 import br.com.Loja.models.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
