@@ -1,11 +1,13 @@
 package br.com.Loja.services;
 
 import br.com.Loja.dtos.OrderDTO;
+import br.com.Loja.events.RegisteredOrderEvent;
 import br.com.Loja.exception.EntityNotFoundException;
 import br.com.Loja.forms.OrderForm;
 import br.com.Loja.models.*;
 import br.com.Loja.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -16,6 +18,12 @@ public class OrderService {
 
     @Autowired
     private OrderRepository repository;
+
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
 
     public Order getById(Long id) {
         return this.repository.findById(id)
@@ -35,6 +43,7 @@ public class OrderService {
 
     public OrderDTO create(OrderForm orderForm){
 
+        productService.validInventory(orderForm.getProductOrders());
         Order order = repository.save(new Order());
         order.setPaid(orderForm.isPaid());
         order.setCustomer(new Customer(orderForm.getCustomerId()));
@@ -45,7 +54,7 @@ public class OrderService {
                 orderForm.getProductOrders()
                     .stream()
                     .map(v ->
-                            new ProductsOrders(
+                            new ProductOrders(
                                 order,
                                 new Product(v.getProduct().getId()),
                                 v.getNetAmount(),
@@ -79,11 +88,9 @@ public class OrderService {
                     .collect(Collectors.toList())
         );
         order.setCreatedAt(LocalDateTime.now());
-        System.out.println(order.getPayments());
-
-        OrderDTO dto = new OrderDTO(this.repository.save(order));
-
-        return dto;
+        Order persisted = this.repository.save(order);
+        applicationEventPublisher.publishEvent(new RegisteredOrderEvent(this, persisted));
+        return new OrderDTO(persisted);
     }
 
     public void validOrderPaymentById(Long id) {

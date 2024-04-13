@@ -1,15 +1,18 @@
 package br.com.Loja.controllers;
 
 import br.com.Loja.dtos.ProductTypeDTO;
+import br.com.Loja.dtos.ProductTypeDashboard;
 import br.com.Loja.forms.ProductTypeForm;
 import br.com.Loja.models.ProductType;
 import br.com.Loja.repositories.ProductTypeRepository;
 import br.com.Loja.services.ProductTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -25,7 +28,6 @@ public class ProductTypeController {
     @GetMapping("/all")
     public ResponseEntity<List<ProductTypeDTO>> findAll(){
         List<ProductType> chips = this.repository.findAll();
-
         if(chips.isEmpty())
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 
@@ -38,18 +40,22 @@ public class ProductTypeController {
     @PostMapping
     public ResponseEntity<ProductTypeDTO> save(@RequestBody ProductTypeForm productTypeForm){
         ProductType productType = productTypeForm.toProductType();
-
         ProductTypeDTO dto = new ProductTypeDTO(this.repository.save(productType));
-
         return new ResponseEntity<>(dto,HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id){
-
         this.repository.deleteById(id);
-
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/dashboard")
+    public ResponseEntity<List<ProductTypeDashboard>> getDashboard(
+            @RequestParam(name = "startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam(name = "endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate){
+        List<ProductTypeDashboard> dtos = this.repository.getDashboard(startDate, endDate);
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
 }

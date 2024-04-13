@@ -33,7 +33,7 @@ public class Order {
     private BigDecimal discounts;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order", fetch = FetchType.LAZY)
-    private Set<ProductsOrders> productOrders = new HashSet<>();
+    private Set<ProductOrders> productOrders = new HashSet<>();
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Payment> payments = new ArrayList<Payment>();

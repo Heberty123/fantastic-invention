@@ -1,18 +1,16 @@
 package br.com.Loja.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "products_orders")
-public class ProductsOrders {
+public class ProductOrders {
 
     @EmbeddedId
     private ProductsOrdersKey id;
@@ -41,7 +39,7 @@ public class ProductsOrders {
 
     private Boolean isRefund;
 
-    public ProductsOrders(Order order, Product product, BigDecimal netAmount, BigDecimal grossAmount, Integer quantity, BigDecimal discounts, Boolean isRefund){
+    public ProductOrders(Order order, Product product, BigDecimal netAmount, BigDecimal grossAmount, Integer quantity, BigDecimal discounts, Boolean isRefund){
         this.order = order;
         this.product = product;
         this.netAmount = netAmount;

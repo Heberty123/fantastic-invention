@@ -28,6 +28,12 @@ public class ProductForm {
 
     private BigDecimal price;
 
+    private Integer quantity;
+
+    private Integer min_quantity;
+
+    private Integer max_quantity;
+
     public Product toProduct(){
         return new Product(
                 this.id,
@@ -37,7 +43,10 @@ public class ProductForm {
                 this.barcode,
                 this.brand.toBrand(),
                 this.productType.toProductType(),
-                this.price
+                this.price,
+                this.quantity,
+                this.min_quantity,
+                this.max_quantity
         );
     }
 }

@@ -3,15 +3,13 @@ package br.com.Loja.controllers;
 import java.util.List;
 
 import br.com.Loja.dtos.CustomerPaymentDTO;
+import br.com.Loja.dtos.SeriesDashboardDTO;
+import br.com.Loja.repositories.OrderRepository;
+import br.com.Loja.repositories.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import br.com.Loja.dtos.PaymentDTO;
 import br.com.Loja.forms.PaymentForm;
@@ -23,6 +21,12 @@ public class PaymentController {
 
     @Autowired
     private PaymentService service;
+
+    @Autowired
+    private PaymentRepository repository;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
     @GetMapping("/today")
     public ResponseEntity<List<CustomerPaymentDTO>> findAllPaymentsToday(){
@@ -42,5 +46,15 @@ public class PaymentController {
 
         PaymentDTO dto = this.service.payNow(paymentForm);
         return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    @GetMapping("/dashboard")
+    public ResponseEntity<List<SeriesDashboardDTO>> getDashboard(@RequestParam(name = "year") Integer year){
+        SeriesDashboardDTO dto1 =
+                new SeriesDashboardDTO("pedidos", this.orderRepository.findSalesDataByCurrentYear(year));
+        SeriesDashboardDTO dto2 =
+                new SeriesDashboardDTO("pagamentos", this.repository.findPaymentDataByCurrentYear(year));
+        List<SeriesDashboardDTO> resulted = List.of(dto1, dto2);
+        return new ResponseEntity<>(resulted, HttpStatus.OK);
     }
 }

@@ -33,10 +33,17 @@ public class Product {
 
     private BigDecimal price;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
-    private Set<ProductsOrders> productsOrders;
+    private Integer quantity;
 
-    public Product(Long id, String name, String description, String reference, String barcode, Brand brand, ProductType productType, BigDecimal price) {
+    private Integer min_quantity;
+
+    private Integer max_quantity;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
+    private Set<ProductOrders> productOrders;
+
+    public Product(Long id, String name, String description, String reference, String barcode, Brand brand, ProductType productType, BigDecimal price,
+        Integer quantity, Integer min_quantity, Integer max_quantity) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -45,6 +52,9 @@ public class Product {
         this.brand = brand;
         this.productType = productType;
         this.price = price;
+        this.quantity = quantity;
+        this.min_quantity = min_quantity;
+        this.max_quantity = max_quantity;
     }
 
     public Product(Long id){

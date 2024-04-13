@@ -26,6 +26,12 @@ public class ProductDTO {
 
     private BigDecimal price;
 
+    private Integer quantity;
+
+    private Integer min_quantity;
+
+    private Integer max_quantity;
+
     public ProductDTO(Product product) {
         id = product.getId();
         name = product.getName();
@@ -35,5 +41,8 @@ public class ProductDTO {
         brand = product.getBrand().getName();
         productType = product.getProductType().getName();
         price = product.getPrice();
+        quantity = product.getQuantity();
+        min_quantity = product.getMin_quantity();
+        max_quantity = product.getMax_quantity();
     }
 }
