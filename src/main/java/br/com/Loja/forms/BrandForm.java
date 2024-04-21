@@ -1,17 +1,14 @@
 package br.com.Loja.forms;
 
 import br.com.Loja.models.Brand;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
-@NoArgsConstructor
-public class BrandForm {
-
-    private Long id;
-    private String name;
+public record BrandForm (
+        Long id,
+        String name
+) {
 
     public Brand toBrand(){
-        return new Brand(id, name);
+        return new Brand(this.id, this.name);
     }
 }

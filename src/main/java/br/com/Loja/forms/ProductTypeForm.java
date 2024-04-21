@@ -5,15 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class ProductTypeForm {
-
-    private Long id;
-
-    private String name;
-
+public record ProductTypeForm (
+        Long id,
+        String name
+) {
     public ProductType toProductType(){
         return new ProductType(
                 this.id,

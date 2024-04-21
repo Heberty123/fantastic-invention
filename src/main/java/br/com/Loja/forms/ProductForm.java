@@ -7,32 +7,19 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class ProductForm {
-
-    private Long id;
-
-    private String name;
-
-    private String description;
-
-    private String reference;
-
-    private String barcode;
-
-    private BrandForm brand;
-
-    private ProductTypeForm productType;
-
-    private BigDecimal price;
-
-    private Integer quantity;
-
-    private Integer min_quantity;
-
-    private Integer max_quantity;
+public record ProductForm (
+        Long id,
+        String name,
+        String description,
+        String reference,
+        String barcode,
+        BrandForm brand,
+        ProductTypeForm productType,
+        BigDecimal price,
+        Integer quantity,
+        Integer min_quantity,
+        Integer max_quantity
+) {
 
     public Product toProduct(){
         return new Product(

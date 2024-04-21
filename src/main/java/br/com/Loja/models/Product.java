@@ -25,10 +25,11 @@ public class Product {
 
     @Column(unique = true)
     private String barcode;
-    @ManyToOne(fetch = FetchType.LAZY)
+
+    @ManyToOne
     private Brand brand;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private ProductType productType;
 
     private BigDecimal price;
@@ -59,5 +60,14 @@ public class Product {
 
     public Product(Long id){
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", quantity=" + quantity +
+                '}';
     }
 }
