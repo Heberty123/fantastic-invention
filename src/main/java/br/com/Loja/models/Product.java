@@ -61,13 +61,4 @@ public class Product {
     public Product(Long id){
         this.id = id;
     }
-
-    @Override
-    public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", quantity=" + quantity +
-                '}';
-    }
 }
