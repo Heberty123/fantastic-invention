@@ -3,7 +3,7 @@ spring:
     database: POSTGRESQL
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
       jdbc:
         time_zone: UTC
     defer-datasource-initialization: true
@@ -12,8 +12,5 @@ spring:
     username: postgres
     password: postgres
     driverClassName: org.postgresql.Driver
-  sql:
-    init:
-      platform: postgres
-      mode: always
+
 
