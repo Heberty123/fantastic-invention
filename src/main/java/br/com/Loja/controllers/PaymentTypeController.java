@@ -53,8 +53,6 @@ public class PaymentTypeController {
             @RequestParam(name = "startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Calendar startDate,
             @RequestParam(name = "endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Calendar endDate
     ) {
-        System.out.println(startDate);
-        System.out.println(endDate);
         return new ResponseEntity<>(repository.getDashboard(startDate, endDate), HttpStatus.OK);
     }
 }

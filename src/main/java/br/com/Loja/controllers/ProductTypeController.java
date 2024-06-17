@@ -6,6 +6,7 @@ import br.com.Loja.forms.ProductTypeForm;
 import br.com.Loja.models.ProductType;
 import br.com.Loja.repositories.ProductTypeRepository;
 import br.com.Loja.services.ProductTypeService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/productType")
@@ -45,7 +47,12 @@ public class ProductTypeController {
     }
 
     @DeleteMapping("/{id}")
+    @Transactional
     public ResponseEntity<?> delete(@PathVariable Long id){
+        Optional<ProductType> opt = this.repository.findById(id);
+        if(opt.isPresent() && !opt.get().getProducts().isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
         this.repository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
