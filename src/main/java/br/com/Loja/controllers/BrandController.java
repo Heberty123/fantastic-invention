@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/brand")
+@RequestMapping("v1/api/brand")
 public class BrandController {
 
     @Autowired

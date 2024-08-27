@@ -31,6 +31,8 @@ public class ProductOrders {
 
     private Integer quantity;
 
+    private BigDecimal amountUnit;
+
     @Column(precision = 5, scale = 4)
     private BigDecimal discounts;
 

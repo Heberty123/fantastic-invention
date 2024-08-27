@@ -1,6 +1,7 @@
 package br.com.Loja.services;
 
 import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.List;
 
 import br.com.Loja.exception.EntityNotFoundException;
@@ -46,7 +47,7 @@ public class PaymentService {
         Payment payment = getById(paymentForm.getId());
         payment.setPaymentType(paymentForm.getPaymentType().toPaymentType());
         payment.setAmountPayed(paymentForm.getAmountPayed());
-        payment.setPayedAt(LocalDateTime.now());
+        payment.setPayedAt(Calendar.getInstance());
         payment.setPaid(true);
         payment = repository.save(payment);
         orderService.validOrderPaymentById(payment.getOrder().getId());

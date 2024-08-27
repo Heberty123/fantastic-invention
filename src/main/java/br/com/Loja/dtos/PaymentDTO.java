@@ -19,7 +19,7 @@ public class PaymentDTO {
     private BigDecimal amount;
     private Calendar paymentDate;
     private PaymentTypeDTO paymentType;
-    private LocalDateTime payedAt;
+    private Calendar payedAt;
     private BigDecimal amountPayed;
     private Boolean paid;
 

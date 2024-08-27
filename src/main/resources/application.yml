@@ -8,7 +8,7 @@ spring:
         time_zone: UTC
     defer-datasource-initialization: true
   datasource:
-    url: jdbc:postgresql://localhost:5433/Loja
+    url: jdbc:postgresql://localhost:5432/loja
     username: postgres
     password: postgres
     driverClassName: org.postgresql.Driver

@@ -14,7 +14,7 @@ public record CustomerPaymentDTO(
         BigDecimal amount,
         Calendar paymentDate,
         PaymentTypeForm paymentType,
-        LocalDateTime payedAt,
+        Calendar payedAt,
         BigDecimal amountPayed,
         Boolean paid
 ) {

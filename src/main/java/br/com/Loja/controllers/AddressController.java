@@ -5,6 +5,7 @@ import br.com.Loja.forms.AddressForm;
 import br.com.Loja.models.Address;
 import br.com.Loja.models.Customer;
 import br.com.Loja.repositories.AddressRepository;
+import br.com.Loja.services.AddressService;
 import br.com.Loja.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,46 +14,48 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/address")
+@RequestMapping("v1/api/customers")
 public class AddressController {
 
     @Autowired
-    private AddressRepository addressRepository;
+    private AddressRepository repository;
+
+    @Autowired
+    private AddressService service;
 
     @Autowired
     private CustomerService customerService;
 
 
-    @PostMapping("/create/{customerId}")
+    @PostMapping("/{customerId}/addresses")
     public ResponseEntity<AddressDTO> create(@RequestBody AddressForm addressForm, @PathVariable Long customerId){
 
         Address address = addressForm.toAddress();
-        Customer customer = customerService.getById(customerId);
-        address.setCustomer(customer);
-        AddressDTO dto = new AddressDTO(addressRepository.save(address));
-        return ResponseEntity.created(null).body(dto);
+        address = service.create(address, customerId);
+        AddressDTO dto = new AddressDTO(address);
+        return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
-    @GetMapping("/all/{customerId}")
+    @GetMapping("/{customerId}/addresses")
     public ResponseEntity<List<AddressDTO>> findAllByCustomer(@PathVariable Long customerId){
-        List<Address> addresses = this.addressRepository.findAllByCustomerId(customerId);
-        List<AddressDTO> addressesDTOS = addresses.stream().map(AddressDTO::new).toList();
-        return new ResponseEntity<>(addressesDTOS, HttpStatus.OK);
+        List<Address> addresses = this.repository.findAllByCustomerId(customerId);
+        List<AddressDTO> dtos = addresses.stream().map(AddressDTO::new).toList();
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
 
-    @PutMapping
-    public ResponseEntity<AddressDTO> update(@RequestBody AddressForm addressForm){
+    @PutMapping("/addresses/{id}")
+    public ResponseEntity<AddressDTO> update(@RequestBody AddressForm addressForm,
+                                             @PathVariable Long customerId){
 
         Address address = addressForm.toAddress();
-        address = this.addressRepository.save(address);
+        address = this.service.update(address, customerId);
         return ResponseEntity.ok(new AddressDTO(address));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/addresses/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id){
-
-        this.addressRepository.deleteById(id);
+        this.repository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -21,7 +21,7 @@ public class PaymentForm {
 
     private PaymentTypeForm paymentType;
 
-    private LocalDateTime payedAt;
+    private Calendar payedAt;
 
     private BigDecimal amountPayed;
 

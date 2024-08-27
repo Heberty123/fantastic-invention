@@ -25,6 +25,10 @@ public class CustomerService {
         return this.repository.findAll();
     }
 
+    public Customer getReferenceById(Long id){
+        return this.repository.getReferenceById(id);
+    }
+
     public Customer getById(Long id){
         return this.repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Customer", id));

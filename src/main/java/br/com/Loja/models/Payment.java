@@ -23,11 +23,11 @@ public class Payment {
 
     private BigDecimal amount;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private PaymentType paymentType;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime payedAt;
+    @Temporal(TemporalType.DATE)
+    private Calendar payedAt;
 
     private BigDecimal amountPayed;
 

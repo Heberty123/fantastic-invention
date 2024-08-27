@@ -1,0 +1,74 @@
+services:
+  system:
+    # This will be uncommented when db service is introduced
+    # depends_on:
+    #  local-pg-16:
+    #    condition: service_healthy
+
+    # always restart when app crashes
+    restart: always
+    build:
+      context: .
+    image: system:v1.0
+    container_name: system
+    hostname: system
+    networks:
+      - my-local-net
+    ports:
+      - 80:8080
+    environment:
+      - PGUSER=${PGUSER}
+      - PGPASSWORD=${PGPASSWORD}
+      - PGHOST=${PGHOST}
+      - PGPORT=${PGPORT}
+      - PGDATABASE=${PGDATABASE}
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  local-pg-16:
+    image: postgres:16
+    container_name: local-pg-16
+    hostname: local-pg-16
+    networks:
+      - my-local-net
+    ports:
+      - 5432:5432
+    volumes:
+      - tes-pg:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=${PGPASSWORD}
+    # Make sure postgres is ready to accept connection as the indicator that
+    # Postgres is ready
+    # ref https://www.postgresql.org/docs/current/app-pg-isready.html
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${PGUSER}" ]
+      # a more complete command
+      # test: ["CMD-SHELL", "pg_isready -U ${PGUSER} -d ${PGDATABASE} -h 127.0.0.1"]
+      interval: 2s
+      timeout: 10s
+      retries: 5
+
+  local-pgadmin:
+    image: dpage/pgadmin4
+    container_name: local-pgadmin
+    hostname: local-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "5050:80"
+    depends_on:
+      - local-pg-16
+    networks:
+      - my-local-net
+
+volumes:
+  tes-pg:
+
+networks:
+  # this will always create new network
+  # my-local-net:
+  #   driver: bridge
+  my-local-net:
+    driver: bridge

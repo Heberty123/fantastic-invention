@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -78,7 +79,7 @@ public class OrderService {
                                             :
                                             null,
                                     v.getAmountPayed() != null ?
-                                            LocalDateTime.now()
+                                            Calendar.getInstance()
                                             :
                                             v.getPayedAt(),
                                     v.getAmountPayed(),
